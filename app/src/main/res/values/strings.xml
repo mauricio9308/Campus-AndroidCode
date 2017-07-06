@@ -17,6 +17,7 @@
     <string name="dialog_title_bluetooth_not_enabled">Bluetooth Desactivado</string>
     <string name="dialog_message_bluetooth_not_enabled">Para usar esta aplicación es necesario tener activo la antena de Bluetooth</string>
     <string name="scan_failed">Error al escanear dispositivos Bluetooth</string>
+    <string name="location_permissions_fallback">Activa los permisos de ubicación y reinicia la app</string>
 
     <!-- Control Activity -->
     <string name="button_a">A</string>
@@ -25,6 +26,7 @@
     <string name="command_send_error">Error al enviar comando</string>
     <string name="close_connection_title">Cierre de conexión</string>
     <string name="close_connection_message">Se perderá toda la conexión con el dispositivo. ¿Deseas continuar?</string>
+    <string name="record_audio_permissions_fallback">Activa los permisos de microfono en ajustes</string>
 
     <!-- Connection Error Dialog -->
     <string name="connection_error_title">Error de conexión</string>

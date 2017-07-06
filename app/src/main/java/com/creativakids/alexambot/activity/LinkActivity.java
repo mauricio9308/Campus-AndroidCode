@@ -1,5 +1,6 @@
 package com.creativakids.alexambot.activity;
 
+import android.Manifest;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -9,8 +10,12 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -44,6 +49,9 @@ public class LinkActivity extends AppCompatActivity implements ConnectionConfirm
 
     // Child fragments tags
     private static final String FRAG_TAG_CONNECTION_CONFIRMATION_DIALOG = "FRAG_TAG_CONNECTION_CONFIRMATION_DIALOG";
+
+    // Request code for the location
+    private static final int REQUEST_CODE_LOCATION = 100;
 
     // Reference for the views
     private ProgressBar loadingProgress;
@@ -91,33 +99,85 @@ public class LinkActivity extends AppCompatActivity implements ConnectionConfirm
             startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
         } else {
             // We trigger the update of the bluetooth scanner process.
-            bluetoothAdapter.startDiscovery();
-            startBluetoothListening();
+            setUpBluetooth();
+        }
+    }
 
-            // Setting first the list of bonded devices
-            Set<BluetoothDevice> bondedDevices = bluetoothAdapter.getBondedDevices();
-            if( bondedDevices != null && !bondedDevices.isEmpty() ){
-                for( BluetoothDevice device : bondedDevices ){
-                    // We filter the non make block devices
-                    if(TextUtils.isEmpty( device.getName()) || !device.getName().contains("Makeblock")
-                            || device.getType() == BluetoothDevice.DEVICE_TYPE_LE){
-                        return; // Nothing to handle...
-                    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        // Handling of the permissions request
+        if( requestCode == REQUEST_CODE_LOCATION ){
+            // We check if the permissions were granted (two values)
+            boolean werePermissionsApproved = grantResults.length == 2 && grantResults[0] == PackageManager.PERMISSION_GRANTED &&
+                    grantResults[1] == PackageManager.PERMISSION_GRANTED;
+            if( werePermissionsApproved ){
+                // We continue with the bluetooth flow
+                setUpBluetooth();
+            }else{
+                // We show an error state
+                Toast.makeText( LinkActivity.this, R.string.location_permissions_fallback, Toast.LENGTH_SHORT ).show();
+                finish();
+            }
+        }else{
+            super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+    }
 
-                    if( devices == null ){
-                        devices = new ArrayList<>();
-                    }
+    /**
+     * Sets up the bluetooth connection for the device
+     * */
+    private void setUpBluetooth(){
+        // We check if we have the permissions
+        boolean havePermissions = (ContextCompat.checkSelfPermission(LinkActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED) && (ContextCompat.checkSelfPermission(LinkActivity.this, Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED);
+        if( !havePermissions ){
+            // We request the permissions
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+                // We check if we should show a rationale
+                boolean canStillAskPermissions = shouldShowRequestPermissionRationale( Manifest.permission.ACCESS_COARSE_LOCATION );
 
-                    // We check if we have already added the device
-                    BluetoothDevice obtainedDevice = obtainedDevices.get( device.getAddress() );
-                    if( obtainedDevice == null ){
-                        devices.add( device );
-                        obtainedDevices.put( device.getAddress(), device );
-                    }
+                // We use the compat API for the Audio permissions
+                if( canStillAskPermissions ){
+                    ActivityCompat.requestPermissions( LinkActivity.this /* Context */, new String[]{ Manifest.permission.ACCESS_COARSE_LOCATION,
+                            Manifest.permission.ACCESS_FINE_LOCATION },
+                            REQUEST_CODE_LOCATION);
+                }else{
+                    Toast.makeText( LinkActivity.this, R.string.location_permissions_fallback, Toast.LENGTH_SHORT ).show();
+                    finish();
+                }
+            }
 
-                    if( !devices.isEmpty() ){
-                        updateAdapter();
-                    }
+            return; // We cannot continue the bluetooth setup
+        }
+
+
+        startBluetoothListening();
+        bluetoothAdapter.startDiscovery();
+
+        // Setting first the list of bonded devices
+        Set<BluetoothDevice> bondedDevices = bluetoothAdapter.getBondedDevices();
+        if( bondedDevices != null && !bondedDevices.isEmpty() ){
+            for( BluetoothDevice device : bondedDevices ){
+                // We filter the non make block devices
+                if(TextUtils.isEmpty( device.getName()) || !device.getName().contains("Makeblock")
+                        || device.getType() == BluetoothDevice.DEVICE_TYPE_LE){
+                    return; // Nothing to handle...
+                }
+
+                if( devices == null ){
+                    devices = new ArrayList<>();
+                }
+
+                // We check if we have already added the device
+                BluetoothDevice obtainedDevice = obtainedDevices.get( device.getAddress() );
+                if( obtainedDevice == null ){
+                    devices.add( device );
+                    obtainedDevices.put( device.getAddress(), device );
+                }
+
+                if( !devices.isEmpty() ){
+                    updateAdapter();
                 }
             }
         }
@@ -198,7 +258,7 @@ public class LinkActivity extends AppCompatActivity implements ConnectionConfirm
             switch (resultCode) {
                 case Activity.RESULT_OK:
                     // We setup the bluetooth connection
-
+                    setUpBluetooth();
                     break;
                 case Activity.RESULT_CANCELED:
                     // We show an error message

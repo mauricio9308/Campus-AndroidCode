@@ -1,11 +1,16 @@
 package com.creativakids.alexambot.activity;
 
+import android.Manifest;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.DialogInterface;
+import android.content.pm.PackageManager;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -42,6 +47,9 @@ public class ControlActivity extends AppCompatActivity implements View.OnClickLi
 
     // State preservation tags
     private static final String STATE_BLUETOOTH_DEVICE = "STATE_BLUETOOTH_DEVICE";
+
+    // Reference for the request codes
+    private static final int REQUEST_CODE_RECORD_AUDIO = 100;
 
     // Frag tags
     private static final String FRAG_TAG_LEX_INPUT = "FRAG_TAG_LEX_INPUT";
@@ -224,8 +232,28 @@ public class ControlActivity extends AppCompatActivity implements View.OnClickLi
      * Opens the microphone dialog for the lex input
     * */
     private void openMicrophoneDialog(){
-        VoiceCommandDialogFragment commandDialogFragment = VoiceCommandDialogFragment.newInstance();
-        commandDialogFragment.show( getSupportFragmentManager(), FRAG_TAG_LEX_INPUT );
+        // We check if we have the permissions
+        boolean havePermissions = ContextCompat.checkSelfPermission(ControlActivity.this, Manifest.permission.RECORD_AUDIO)
+                == PackageManager.PERMISSION_GRANTED;
+        if( havePermissions ){
+            // We just open the dialog
+            VoiceCommandDialogFragment commandDialogFragment = VoiceCommandDialogFragment.newInstance();
+            commandDialogFragment.show( getSupportFragmentManager(), FRAG_TAG_LEX_INPUT );
+        }else{
+            // We request the permissions
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+                // We check if we should show a rationale
+                boolean canStillAskPermissions = shouldShowRequestPermissionRationale( Manifest.permission.RECORD_AUDIO );
+
+                // We use the compat API for the Audio permissions
+                if( canStillAskPermissions ){
+                    ActivityCompat.requestPermissions( ControlActivity.this /* Context */, new String[]{ Manifest.permission.RECORD_AUDIO },
+                            REQUEST_CODE_RECORD_AUDIO);
+                }else{
+                    Toast.makeText( ControlActivity.this, R.string.record_audio_permissions_fallback, Toast.LENGTH_SHORT ).show();
+                }
+            }
+        }
     }
 
     /**
