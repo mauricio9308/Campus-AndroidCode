@@ -1,0 +1,37 @@
+<resources>
+
+    <!-- General Strings -->
+    <string name="app_name">Alexa mBot</string>
+    <string name="exit">Salir</string>
+    <string name="cancel">Cancelar</string>
+    <string name="connect">Conectar</string>
+    <string name="loading">Cargando&#8230;</string>
+
+    <!-- Configuration Strings -->
+    <string name="bot_name">mBot</string>
+    <string name="bot_alias">mBot</string>
+    <string name="identity_id_test">poolID</string>
+
+    <!-- Link Activity -->
+    <string name="no_devices_found">No se encontraron dispositivos</string>
+    <string name="dialog_title_bluetooth_not_enabled">Bluetooth Desactivado</string>
+    <string name="dialog_message_bluetooth_not_enabled">Para usar esta aplicación es necesario tener activo la antena de Bluetooth</string>
+    <string name="scan_failed">Error al escanear dispositivos Bluetooth</string>
+
+    <!-- Control Activity -->
+    <string name="button_a">A</string>
+    <string name="button_b">B</string>
+    <string name="stop">STOP</string>
+    <string name="command_send_error">Error al enviar comando</string>
+    <string name="close_connection_title">Cierre de conexión</string>
+    <string name="close_connection_message">Se perderá toda la conexión con el dispositivo. ¿Deseas continuar?</string>
+
+    <!-- Connection Error Dialog -->
+    <string name="connection_error_title">Error de conexión</string>
+    <string name="connection_error_message">¡Algo malo ha sucedido :(!\nIntenta conectarte de nuevo</string>
+
+    <!-- Connection Confirmation Dialog -->
+    <string name="connection_confirmation_title">Conexión a dispositivo</string>
+    <string name="connection_confirmation_message">Estas seguro que deseas conectarte al dispositivo %1$s</string>
+
+</resources>

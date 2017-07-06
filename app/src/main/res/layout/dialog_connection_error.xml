@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="@dimen/activity_horizontal_margin">
+
+    <TextView
+        android:textSize="18sp"
+        android:textColor="@android:color/black"
+        android:text="@string/connection_error_title"
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/vertical_base_separation"/>
+
+    <ImageView
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_gravity="center_horizontal"
+        android:src="@drawable/mbot"/>
+
+    <TextView
+        android:id="@+id/txt_linking_device"
+        android:textSize="14sp"
+        android:textColor="@android:color/black"
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/vertical_base_separation"
+        android:paddingLeft="@dimen/horizontal_large_separation"
+        android:paddingRight="@dimen/horizontal_large_separation"
+        android:text="@string/connection_error_message"/>
+
+    <!-- Container for the action buttons -->
+    <Button
+        android:id="@+id/bttn_ok"
+        android:text="@android:string/ok"
+        style="?borderlessButtonStyle"
+        android:layout_width="wrap_content"
+        android:layout_gravity="center"
+        android:paddingLeft="@dimen/horizontal_large_separation"
+        android:paddingRight="@dimen/horizontal_large_separation"
+        android:textColor="@android:color/darker_gray"
+        android:layout_marginTop="@dimen/vertical_base_separation"
+        android:layout_height="@dimen/clickable_size" />
+
+
+</LinearLayout>

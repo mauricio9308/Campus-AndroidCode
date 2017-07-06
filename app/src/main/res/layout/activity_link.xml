@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingLeft="@dimen/landscape_activity_horizontal_margin"
+    android:paddingRight="@dimen/landscape_activity_horizontal_margin">
+
+    <!-- Main container for the list of the devices -->
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_devices"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        tools:visibility="visible"/>
+
+    <!-- Progress wheel for the fetch of new items  -->
+    <ProgressBar
+        android:id="@+id/progress_item_fetch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="visible"
+        tools:visibility="gone"/>
+
+    <!-- Simple container for the empty state -->
+    <LinearLayout
+        android:id="@+id/layout_empty_devices"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <!-- Empty state image -->
+        <ImageView
+            android:src="@drawable/mbot"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="@dimen/activity_vertical_margin"/>
+
+        <!-- Simple empty message -->
+        <TextView
+            android:id="@+id/txt_empty_message"
+            android:text="@string/no_devices_found"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+</FrameLayout>

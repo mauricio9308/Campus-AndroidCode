@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="landscape_activity_horizontal_margin">32dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="clickable_size">46dp</dimen>
+    <dimen name="clickable_size_large">60dp</dimen>
+    <dimen name="control_secondary_button_size">50dp</dimen>
+    <dimen name="control_main_button_size">80dp</dimen>
+    <dimen name="horizontal_large_separation">32dp</dimen>
+    <dimen name="horizontal_base_separation">16dp</dimen>
+    <dimen name="vertical_large_separation">32dp</dimen>
+    <dimen name="vertical_base_separation">16dp</dimen>
+    <dimen name="vertical_small_separation">8dp</dimen>
+
+</resources>

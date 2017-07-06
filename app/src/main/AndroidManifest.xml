@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.creativakids.alexambot">
+
+    <!-- Necessary permissions for the mBot connection -->
+    <uses-permission android:name="android.permission.BLUETOOTH"/>
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+
+    <uses-feature android:name="android.hardware.bluetooth_le" android:required="true"/>
+    <uses-feature android:name="android.hardware.location.network"/>
+    <uses-feature android:name="android.hardware.location.gps"/>
+
+    <!-- Necessary permissions for the Alexa connection -->
+    <uses-permission android:name="android.permission.INTERNET"/>
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+
+
+        <!-- Splash screen -->
+        <activity android:name=".activity.SplashActivity"
+            android:theme="@style/SplashTheme"
+            android:screenOrientation="landscape">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- Activity for the link of the mBots -->
+        <activity android:name=".activity.LinkActivity"
+            android:launchMode="singleTask"
+            android:label="Elige tu dispositivo"
+            android:screenOrientation="landscape"/>
+
+        <!-- Activity for the control of the mBots -->
+        <activity android:name=".activity.ControlActivity"
+            android:label="Control"
+            android:launchMode="singleTask"
+            android:screenOrientation="landscape"/>
+
+    </application>
+
+</manifest>

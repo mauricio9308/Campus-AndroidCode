@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:textSize="18sp"
+        android:textColor="@android:color/black"
+        android:text="@string/connection_confirmation_title"
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/vertical_base_separation"/>
+
+    <ImageView
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_gravity="center_horizontal"
+        android:src="@drawable/connection"/>
+
+    <TextView
+        android:id="@+id/txt_linking_device"
+        android:textSize="14sp"
+        android:textColor="@android:color/black"
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/vertical_base_separation"
+        android:paddingLeft="@dimen/horizontal_large_separation"
+        android:paddingRight="@dimen/horizontal_large_separation"
+        tools:text="@string/connection_confirmation_message"/>
+
+    <!-- Container for the action buttons -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/clickable_size"
+        android:orientation="horizontal"
+        android:weightSum="100"
+        android:layout_marginTop="@dimen/vertical_base_separation"
+        android:layout_marginBottom="@dimen/vertical_base_separation">
+
+        <Button
+            android:id="@+id/bttn_cancel"
+            android:text="@string/cancel"
+            style="?borderlessButtonStyle"
+            android:layout_weight="50"
+            android:layout_width="0dp"
+            android:textColor="@android:color/darker_gray"
+            android:layout_height="@dimen/clickable_size" />
+
+        <Button
+            android:id="@+id/bttn_connect"
+            android:text="@string/connect"
+            android:textColor="@color/colorPrimaryDark"
+            style="?borderlessButtonStyle"
+            android:layout_weight="50"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/clickable_size" />
+
+    </LinearLayout>
+
+
+</LinearLayout>
