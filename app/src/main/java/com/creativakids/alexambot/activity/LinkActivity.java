@@ -84,7 +84,6 @@ public class LinkActivity extends AppCompatActivity implements ConnectionConfirm
         obtainedDevices = new HashMap<>();
 
         // Getting the instance of the bluetooth adapter
-        // TODO create the bluetooth manager
         final BluetoothManager bluetoothManager =
                 (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
         bluetoothAdapter = bluetoothManager.getAdapter();
