@@ -71,6 +71,7 @@ public class ControlActivity extends AppCompatActivity implements View.OnClickLi
     public static final int COMMAND_TURN = 5;
     public static final int COMMAND_STOP = 6;
     public static final int COMMAND_B_BUTTON = 7;
+    public static final int COMMAND_A_BUTTON = 8;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -218,7 +219,7 @@ public class ControlActivity extends AppCompatActivity implements View.OnClickLi
      * Handles the click of the A button
      * */
     private void handleAButton(){
-        sendCommand( COMMAND_TURN );
+        sendCommand( COMMAND_A_BUTTON );
     }
 
     /**
@@ -288,6 +289,8 @@ public class ControlActivity extends AppCompatActivity implements View.OnClickLi
      * Sends a command to the device via the current bluetooth socket
      * */
     private void sendCommand( int command ){
+        Log.d(LOG_TAG, "Sending command: " + command);
+
         boolean commandSendSuccess = false;
         try{
             if( bTSocket != null && bTSocket.isConnected() ){
