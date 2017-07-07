@@ -4,7 +4,6 @@ import android.Manifest;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
-import android.bluetooth.BluetoothManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -80,13 +79,14 @@ public class LinkActivity extends AppCompatActivity implements ConnectionConfirm
         loadingProgress = (ProgressBar) findViewById(R.id.progress_item_fetch);
         devicesRecycler = (RecyclerView) findViewById(R.id.recycler_devices);
 
-        // Getting the instance of the bluetooth adapter
-        final BluetoothManager bluetoothManager =
-                (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
-        bluetoothAdapter = bluetoothManager.getAdapter();
-
         // Getting the cache of devices
         obtainedDevices = new HashMap<>();
+
+        // Getting the instance of the bluetooth adapter
+        // TODO create the bluetooth manager
+//        final BluetoothManager bluetoothManager =
+//                (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
+//        bluetoothAdapter = bluetoothManager.getAdapter();
     }
 
     @Override
@@ -159,27 +159,44 @@ public class LinkActivity extends AppCompatActivity implements ConnectionConfirm
         Set<BluetoothDevice> bondedDevices = bluetoothAdapter.getBondedDevices();
         if( bondedDevices != null && !bondedDevices.isEmpty() ){
             for( BluetoothDevice device : bondedDevices ){
-                // We filter the non make block devices
-                if(TextUtils.isEmpty( device.getName()) || !device.getName().contains("Makeblock")
-                        || device.getType() == BluetoothDevice.DEVICE_TYPE_LE){
-                    return; // Nothing to handle...
-                }
-
-                if( devices == null ){
-                    devices = new ArrayList<>();
-                }
-
-                // We check if we have already added the device
-                BluetoothDevice obtainedDevice = obtainedDevices.get( device.getAddress() );
-                if( obtainedDevice == null ){
-                    devices.add( device );
-                    obtainedDevices.put( device.getAddress(), device );
-                }
-
-                if( !devices.isEmpty() ){
-                    updateAdapter();
-                }
+                processNewDevice( device );
             }
+        }
+    }
+
+    /**
+     * Process a new device being request by the adapter
+     * */
+    private void processNewDevice(BluetoothDevice device){
+        // Logging the devices
+        Log.d(LOG_TAG, "Device: " + device.getName() + " : " + device.getType() );
+
+        // We filter the non make block devices
+        if(TextUtils.isEmpty( device.getName()) || !device.getName().contains("Makeblock")
+                || device.getType() == BluetoothDevice.DEVICE_TYPE_LE){
+            return; // Nothing to handle...
+        }
+
+        if( devices == null ){
+            devices = new ArrayList<>();
+        }
+
+        // We check if we have already added the device
+        BluetoothDevice obtainedDevice = obtainedDevices.get( device.getAddress() );
+        if( obtainedDevice == null ){
+            devices.add( device );
+            obtainedDevices.put( device.getAddress(), device );
+        }
+
+        updateAdapter();
+
+        // We update the visibility of the views list
+        if (devices.isEmpty()) {
+            loadingProgress.setVisibility(View.VISIBLE);
+            devicesRecycler.setVisibility(View.GONE);
+        } else {
+            loadingProgress.setVisibility(View.GONE);
+            devicesRecycler.setVisibility(View.VISIBLE);
         }
     }
 
@@ -200,41 +217,11 @@ public class LinkActivity extends AppCompatActivity implements ConnectionConfirm
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
             if (BluetoothDevice.ACTION_FOUND.equals(action)) {
-
                 // Getting the new device
                 BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-
-                // Logging the devices
-                Log.d(LOG_TAG, "Device: " + device.getName() + " : " + device.getType() );
-
-                // We filter the non make block devices
-                if(TextUtils.isEmpty( device.getName()) || !device.getName().contains("Makeblock")
-                        || device.getType() == BluetoothDevice.DEVICE_TYPE_LE){
-                    return; // Nothing to handle...
+                if( device != null ){
+                    processNewDevice( device );
                 }
-
-                if( devices == null ){
-                    devices = new ArrayList<>();
-                }
-
-                // We check if we have already added the device
-                BluetoothDevice obtainedDevice = obtainedDevices.get( device.getAddress() );
-                if( obtainedDevice == null ){
-                    devices.add( device );
-                    obtainedDevices.put( device.getAddress(), device );
-                }
-
-                updateAdapter();
-
-                // We update the visibility of the views list
-                if (devices.isEmpty()) {
-                    loadingProgress.setVisibility(View.VISIBLE);
-                    devicesRecycler.setVisibility(View.GONE);
-                } else {
-                    loadingProgress.setVisibility(View.GONE);
-                    devicesRecycler.setVisibility(View.VISIBLE);
-                }
-
             }
         }
     };
